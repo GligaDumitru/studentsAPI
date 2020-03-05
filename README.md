@@ -1,4 +1,12 @@
-# White House Web API Standards
+# Students REST API
+
+# Instruction to run the app locally
+* Clone the project
+* Go to project folder
+* Run npm install
+* Run npm run dev
+* Open Postman https://www.postman.com/ | Insomnia https://insomnia.rest/
+
 
 * [GET All Students](#getAllStudents)
 * [GET Student By ID](#getStudentById)
@@ -22,11 +30,11 @@
 * Select Method [POST] in postman.
 * Add the following URL: http://localhost:5000/api/v1/students/
 
-      {
-          "name": "John Snow",
-          "email": "john.snow@info.uaic.ro",
-          "matricolNumber":"123456789"
-     }
+    {
+        "name": "John Snow",
+        "email": "john.snow@info.uaic.ro",
+        "matricolNumber":"123456789",
+    }
 
 ## createStudent
 
@@ -37,7 +45,7 @@
           "name": "John Snow 2",
           "email": "john.sno2w@info.uaic.ro",
           "matricolNumber":"1234567891"
-     }
+         }
 
 ## deleteStudentById
 
