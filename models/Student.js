@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 const config = require('../config');
+const validator = require('validator')
 const conn = mongoose.createConnection(config.MONGO_CONNECTION, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 })
 
+mongoose.set('useFindAndModify', false);
 conn.on('error', error => {
     if (error) throw error;
 })
@@ -20,13 +23,9 @@ const studentSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
+        required: 'Email address is required',
         unique: true,
-        validate: {
-            // firstname.lastname@mailserver.domain.com
-            validator: (value) => /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(v)
-        },
-        message: "{VALUE} is not a valid email!"
+        validate: [validator.isEmail, 'Please fill a valid email address. prenume.nume@info.uaic.ro'],
     },
     matricolNumber: {
         type: String,
@@ -46,6 +45,63 @@ module.exports.GetAllStudents = () => {
                 resolve(res)
             else
                 reject(err)
+        })
+    })
+}
+
+module.exports.GetStudentById = (id) => {
+    return new Promise((resolve, reject) => {
+        const query = studentModel.findOne({ _id: id });
+
+        query.lean().exec((err, res) => {
+            if (res) resolve(res)
+            else
+                reject(err)
+        })
+    })
+}
+
+module.exports.SetStudent = (student) => {
+    const newStudent = new studentModel(student);
+
+    return new Promise((resolve, reject) => {
+        // check if data matches the requirements of schema
+        const getError = newStudent.validateSync();
+        if (getError) {
+            reject(getError, '[ERROR] Something went wrong.Bad request.')
+        }
+
+        newStudent.save((err, res) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(res)
+        })
+    })
+}
+
+module.exports.RemoveStudent = studentId => {
+
+    return new Promise((resolve, reject) => {
+        const query = studentModel.findByIdAndRemove(studentId);
+
+        query.lean().exec((err, res) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(res)
+            }
+        })
+    })
+}
+
+module.exports.UpdateStudent = (studentId, data) => {
+    return new Promise((resolve, reject) => {
+        const query = studentModel.findByIdAndUpdate({ _id: studentId }, data, (err, res) => {
+            if (err)
+                reject(err)
+            else
+                resolve(res)
         })
     })
 }
