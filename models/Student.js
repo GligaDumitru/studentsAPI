@@ -30,7 +30,6 @@ const studentSchema = new mongoose.Schema({
     matricolNumber: {
         type: String,
         required: true,
-        unique: true
     }
 })
 
@@ -39,6 +38,19 @@ const studentModel = conn.model('students', studentSchema);
 module.exports.GetAllStudents = () => {
     return new Promise((resolve, reject) => {
         const query = studentModel.find({});
+
+        query.lean().exec((err, res) => {
+            if (res)
+                resolve(res)
+            else
+                reject(err)
+        })
+    })
+}
+
+module.exports.RemoveAllFromCollections = () => {
+    return new Promise((resolve, reject) => {
+        const query = studentModel.remove({})
 
         query.lean().exec((err, res) => {
             if (res)

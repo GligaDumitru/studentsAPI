@@ -29,7 +29,7 @@ module.exports = async (req, res, routes) => {
     //check if I found a route that matches
     if (route) {
         let body = null;
-        if (req.method === 'POST' || req.method === 'PATCH') {
+        if (req.method === 'POST' || req.method === 'PATCH' || req.method === 'PUT') {
             body = await Utils.returnStringFromReadableStream(req)
         }
         return route.callback(res, body, param)

@@ -21,17 +21,26 @@ const routes = [
         method: 'POST',
         path: '/students',
         callback: StudentsController.SetStudent
-    }
-    ,
+    },
     {
         method: 'DELETE',
         path: /\/students\/([0-9a-z]+)/,
         callback: StudentsController.RemoveStudent
     },
     {
+        method: 'DELETE',
+        path: '/students',
+        callback: StudentsController.RemoveStudentAll
+    },
+    {
         method: 'PATCH',
         path: /\/students\/([0-9a-z]+)/,
         callback: StudentsController.UpdateStudent
+    },
+    {
+        method: 'PUT',
+        path: /\/students\/([0-9a-z]+)/,
+        callback: StudentsController.UpdateStudentAllFields
     }
 ]
 
